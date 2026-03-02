@@ -1,122 +1,720 @@
-/* ===== PAGE WRAPPER ===== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+:root {
+  --orange: #FF6B35;
+  --orange-light: #FF8C5A;
+  --orange-pale: #FFE5D9;
+  --pink: #FF4D8D;
+  --pink-light: #FF7BAC;
+  --pink-pale: #FFE0ED;
+  --white: #FFFFFF;
+  --off-white: #FFF8F5;
+  --text-dark: #2D1B0E;
+  --text-mid: #7A4F3A;
+  --shadow-card: 0 20px 60px rgba(255, 107, 53, 0.15), 0 8px 25px rgba(255, 77, 141, 0.1);
+  --shadow-input: 0 4px 15px rgba(255, 107, 53, 0.12);
+  --radius: 24px;
+  --radius-sm: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--white);
+}
+
+/* ─── PAGE WRAPPER ─── */
 .salary-calc-page {
+  min-height: 100vh;
+  background: var(--white);
   display: flex;
-  justify-content: center;          /* ✅ CENTER HORIZONTALLY */
-  align-items: flex-start;
-  padding: 60px 40px;               /* ✅ Better top spacing */
-  background: #f4f7fb;
-  min-height: calc(100vh - 70px);   /* ✅ Adjust for header */
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* ===== CARD ===== */
+/* ─── CARTOON SVG DECORATIONS ─── */
+.salary-calc-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(255, 107, 53, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 77, 141, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 200, 150, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating cartoon shapes */
+.salary-calc-page::after {
+  content: '🌟';
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  font-size: 60px;
+  opacity: 0.15;
+  animation: floatStar 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatStar {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(15deg); }
+}
+
+/* ─── CARTOON CHARACTERS (pure CSS) ─── */
+.cartoon-character {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Piggy bank character - top left */
+.cartoon-piggy {
+  top: 8%;
+  left: 3%;
+  animation: wobble 3s ease-in-out infinite;
+}
+
+/* Calculator character - bottom right */
+.cartoon-calc {
+  bottom: 8%;
+  right: 3%;
+  animation: wobble 3.5s ease-in-out infinite reverse;
+}
+
+/* Coin character - top right */
+.cartoon-coin {
+  top: 55%;
+  right: 2%;
+  animation: spinBounce 4s ease-in-out infinite;
+}
+
+/* Money bag - bottom left */
+.cartoon-bag {
+  bottom: 10%;
+  left: 2%;
+  animation: wobble 2.8s ease-in-out infinite;
+}
+
+/* Star decorations scattered */
+.cartoon-star1 {
+  top: 30%;
+  left: 1%;
+  animation: twinkle 2s ease-in-out infinite;
+}
+.cartoon-star2 {
+  top: 70%;
+  right: 1%;
+  animation: twinkle 2.5s ease-in-out infinite 0.5s;
+}
+.cartoon-star3 {
+  top: 15%;
+  left: 40%;
+  animation: twinkle 3s ease-in-out infinite 1s;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(-10px); }
+}
+
+@keyframes spinBounce {
+  0%, 100% { transform: rotateY(0deg) translateY(0); }
+  25% { transform: rotateY(90deg) translateY(-8px); }
+  50% { transform: rotateY(180deg) translateY(0); }
+  75% { transform: rotateY(270deg) translateY(-8px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* ─── CARD ─── */
 .salary-calc-card {
+  background: var(--white);
+  border-radius: 32px;
+  box-shadow: var(--shadow-card),
+    0 0 0 2px rgba(255, 107, 53, 0.08);
+  padding: 48px 44px;
   width: 100%;
-  max-width: 520px;
-  background: #ffffff;
-  padding: 30px 35px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  max-width: 540px;
+  position: relative;
+  z-index: 1;
+  animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* ===== TITLE ===== */
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Cartoon top banner on card */
+.salary-calc-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(90deg, var(--orange), var(--pink), var(--orange-light), var(--pink-light));
+  border-radius: 32px 32px 0 0;
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ─── HEADER ─── */
 .salary-calc-card h2 {
-  font-size: 26px;
-  font-weight: 700;
-  color: #ff6b00;
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: var(--text-dark);
+  text-align: center;
   margin-bottom: 6px;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* ===== SUBTITLE ===== */
 .subtitle {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 28px;
+  text-align: center;
+  color: var(--text-mid);
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--orange-pale), var(--pink-pale));
+  border-radius: 50px;
+  display: inline-block;
+  width: 100%;
 }
 
-/* ===== MESSAGE ===== */
+/* ─── CARTOON ICON HEADER ─── */
+.card-icon-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  animation: iconBounce 2s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.card-icon:nth-child(1) {
+  background: var(--orange-pale);
+  animation-delay: 0s;
+}
+.card-icon:nth-child(2) {
+  background: var(--pink-pale);
+  animation-delay: 0.3s;
+}
+.card-icon:nth-child(3) {
+  background: linear-gradient(135deg, var(--orange-pale), var(--pink-pale));
+  animation-delay: 0.6s;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ─── MESSAGES ─── */
 .message {
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
   margin-bottom: 20px;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  border-left: 4px solid;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .message.success {
-  background: #e6f7ee;
-  color: #0f9d58;
-  border: 1px solid #b7ebcd;
+  background: linear-gradient(135deg, #E8F8F0, #D4F4E4);
+  color: #1A7A4A;
+  border-color: #2EC97A;
+}
+
+.message.warning {
+  background: linear-gradient(135deg, var(--orange-pale), #FFF3E0);
+  color: #B85C00;
+  border-color: var(--orange);
 }
 
 .message.error {
-  background: #fdecea;
-  color: #d93025;
-  border: 1px solid #f5c2c7;
+  background: linear-gradient(135deg, var(--pink-pale), #FFE0E0);
+  color: #B5003A;
+  border-color: var(--pink);
 }
 
-/* ===== FORM GROUP ===== */
+/* ─── FORM GROUPS ─── */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+  position: relative;
 }
 
-/* ===== LABEL ===== */
 .form-group label {
   display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 6px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
 }
 
-/* ===== INPUT ===== */
 .form-group input {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 15px;
-  transition: all 0.2s ease;
+  padding: 14px 18px;
+  border: 2.5px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--off-white);
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-input);
+  outline: none;
 }
 
 .form-group input:focus {
-  outline: none;
-  border-color: #ff6b00;
-  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
-}
-
-/* ===== BUTTON ===== */
-.save-btn {
-  width: 100%;
-  margin-top: 20px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ff8a00, #ff6b00);
-  color: #ffffff;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.save-btn:hover {
+  border-color: var(--orange);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.12), var(--shadow-input);
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(255, 107, 0, 0.35);
+}
+
+.form-group input:hover:not(:focus):not(:disabled) {
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.form-group input::placeholder {
+  color: #C4A898;
+  font-weight: 600;
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── FIELD EMOJI ICONS ─── */
+.form-group::before {
+  position: absolute;
+  right: 16px;
+  top: 36px;
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.form-group:nth-child(1)::before { content: '🏠'; }
+.form-group:nth-child(2)::before { content: '🏡'; }
+.form-group:nth-child(3)::before { content: '💼'; }
+
+.field-note {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-mid);
+  margin-top: 5px;
+  font-weight: 600;
+  padding-left: 2px;
+}
+
+/* ─── BUTTONS ─── */
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.save-btn, .reset-btn {
+  flex: 1;
+  padding: 15px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  color: white;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
+}
+
+.save-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(255, 107, 53, 0.45);
+}
+
+.save-btn:hover:not(:disabled)::after {
+  opacity: 1;
+}
+
+.save-btn span, .save-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.save-btn:active:not(:disabled) {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .save-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
-  box-shadow: none;
+  transform: none;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-  .salary-calc-page {
-    padding: 30px 16px;
+.reset-btn {
+  background: var(--white);
+  color: var(--orange);
+  border: 2.5px solid var(--orange);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+}
+
+.reset-btn:hover:not(:disabled) {
+  background: var(--orange-pale);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.2);
+}
+
+.reset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── INFO BOX ─── */
+.info-box {
+  margin-top: 28px;
+  padding: 20px 22px;
+  background: linear-gradient(135deg, var(--orange-pale) 0%, var(--pink-pale) 100%);
+  border-radius: var(--radius-sm);
+  border: 2px dashed rgba(255, 107, 53, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.info-box::before {
+  content: '💡';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 40px;
+  opacity: 0.15;
+  transform: rotate(15deg);
+}
+
+.info-box h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: var(--orange);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-box h4::before {
+  content: '📋';
+}
+
+.info-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-box ul li {
+  font-size: 0.84rem;
+  color: var(--text-mid);
+  font-weight: 600;
+  padding: 5px 0;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.info-box ul li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--pink);
+  font-size: 10px;
+  top: 7px;
+}
+
+.info-box ul li strong {
+  color: var(--orange);
+}
+
+/* ─── LOADING STATE ─── */
+.loading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.loading h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading p {
+  color: var(--text-mid);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ─── ERROR HIGHLIGHTS ─── */
+.form-group input.input-error {
+  border-color: var(--pink);
+  background: var(--pink-pale);
+}
+
+.error-text {
+  font-size: 0.76rem;
+  color: var(--pink);
+  font-weight: 700;
+  margin-top: 4px;
+  padding-left: 2px;
+  display: block;
+}
+
+
+/* ─── SUCCESS TOAST ─── */
+.success-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 50px;
+  padding: 12px 20px 12px 14px;
+  box-shadow:
+    0 8px 32px rgba(255, 107, 53, 0.22),
+    0 2px 10px rgba(255, 77, 141, 0.12),
+    0 0 0 2px rgba(255, 107, 53, 0.12);
+  animation: toastSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  white-space: nowrap;
+  min-width: 220px;
+  max-width: 340px;
+}
+
+.success-toast.toast-exit {
+  animation: toastSlideOut 0.35s ease-in forwards;
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);      opacity: 1; }
+}
+
+@keyframes toastSlideOut {
+  from { transform: translateX(-50%) translateY(0);      opacity: 1; }
+  to   { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+}
+
+/* Icon bubble */
+.toast-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: iconSpin 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes iconSpin {
+  from { transform: scale(0) rotate(-180deg); }
+  to   { transform: scale(1) rotate(0deg); }
+}
+
+/* Animated SVG tick inside icon */
+.toast-tick {
+  width: 18px;
+  height: 18px;
+}
+
+.toast-tick-circle {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawToastCircle 0.4s ease 0.3s forwards;
+}
+@keyframes drawToastCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+.toast-tick-check {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: drawToastCheck 0.3s ease 0.6s forwards;
+}
+@keyframes drawToastCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Text area */
+.toast-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.toast-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.toast-sub {
+  font-size: 0.72rem;
+  color: var(--text-mid);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Emoji pop */
+.toast-emoji {
+  font-size: 20px;
+  animation: emojiWiggle 0.6s ease 0.5s both;
+  flex-shrink: 0;
+}
+
+@keyframes emojiWiggle {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60%  { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Progress bar at bottom of toast */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  background: var(--orange-pale);
+  border-radius: 0 0 50px 50px;
+  overflow: hidden;
+}
+
+.toast-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--pink));
+  border-radius: 99px;
+  transform-origin: left;
+  animation: toastBar 3s linear 0.2s forwards;
+}
+
+@keyframes toastBar {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 580px) {
+  .salary-calc-card {
+    padding: 32px 24px;
+    border-radius: 24px;
   }
 
+  .salary-calc-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .cartoon-character {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 580px) {
   .salary-calc-card {
-    padding: 25px 20px;
+    padding: 32px 24px;
+    border-radius: 24px;
+  }
+
+  .salary-calc-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .cartoon-character {
+    opacity: 0.6;
   }
 }

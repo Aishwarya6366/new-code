@@ -10,7 +10,8 @@ export default class ForgotPassword extends Component {
     email: '',
     message: '',
     redirect: false,
-    usernameError: ''
+    usernameError: '',
+    isLoading: false
   };
 
   handleChange = (e) => {
@@ -42,7 +43,10 @@ export default class ForgotPassword extends Component {
     // ✅ Block submit if Employee ID invalid
     if (this.state.usernameError) return;
 
-    fetch('/forget-password', {
+    this.setState({ isLoading: true, message: '' });
+
+    // Swagger API endpoint: PUT /api/forget-password
+    fetch('/api/forget-password', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -50,20 +54,29 @@ export default class ForgotPassword extends Component {
         email: this.state.email
       })
     })
-      .then(res => {
-        if (!res.ok) throw new Error();
-
+      .then(async res => {
+        if (!res.ok) {
+          // Try to get error message from response
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Request failed');
+        }
+        return res.json();
+      })
+      .then(data => {
         this.setState({
-          message: 'Please check your registered email. We sent a new password.'
+          message: 'Please check your registered email. We sent a new password.',
+          isLoading: false
         });
 
         setTimeout(() => {
           this.setState({ redirect: true });
         }, 3000);
       })
-      .catch(() => {
+      .catch(error => {
+        console.error('Forgot password error:', error);
         this.setState({
-          message: 'Employee ID and Registered Email do not match'
+          message: 'Employee ID and Registered Email do not match',
+          isLoading: false
         });
       });
   };
@@ -72,6 +85,8 @@ export default class ForgotPassword extends Component {
     if (this.state.redirect) {
       return <Navigate to="/" replace />;
     }
+
+    const { username, email, message, usernameError, isLoading } = this.state;
 
     return (
       <div className="login-page">
@@ -89,15 +104,16 @@ export default class ForgotPassword extends Component {
               <input
                 name="username"
                 placeholder="VPPL001 or VPPL0001"
-                value={this.state.username}
+                value={username}
                 onChange={this.handleChange}
-                className="login-input"
+                className={`login-input ${usernameError ? 'input-error' : ''}`}
                 required
+                disabled={isLoading}
               />
 
-              {this.state.usernameError && (
+              {usernameError && (
                 <small className="error-message">
-                  {this.state.usernameError}
+                  {usernameError}
                 </small>
               )}
 
@@ -107,23 +123,28 @@ export default class ForgotPassword extends Component {
                 type="email"
                 name="email"
                 placeholder="Enter Registered Email ID"
-                value={this.state.email}
+                value={email}
                 onChange={this.handleChange}
                 className="login-input"
                 required
+                disabled={isLoading}
               />
 
-              <button className="login-button">Submit</button>
+              <button 
+                className="login-button" 
+                type="submit"
+                disabled={isLoading || !!usernameError}
+              >
+                {isLoading ? 'Submitting...' : 'Submit'}
+              </button>
 
-              {this.state.message && (
+              {message && (
                 <div
-                  className={`error-message ${
-                    this.state.message.includes('check')
-                      ? 'success'
-                      : ''
+                  className={`message ${
+                    message.includes('check') ? 'success-message' : 'error-message'
                   }`}
                 >
-                  {this.state.message}
+                  {message}
                 </div>
               )}
             </form>

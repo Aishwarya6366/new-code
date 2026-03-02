@@ -4,11 +4,10 @@ import { Link, Navigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css';
 import Header from './components/Header';
-import loginBg from './assets/login-bg.jpeg';
-
-//console.log("/api"); // should print http://localhost:8080
-
-
+import img1 from "./assets/IMAGES1.jpg";
+import img2 from "./assets/IMAGES2.jpeg";
+import img3 from "./assets/IMAGES3.jpg";
+import img4 from "./assets/IMAGES4.jpg";
 
 export default class Login extends Component {
   state = {
@@ -17,37 +16,72 @@ export default class Login extends Component {
     showPassword: false,
     redirectTo: null,
     error: '',
-    usernameError: ''
+    usernameError: '',
+    passwordError: '',
+    currentIndex: 0,
+    touched: { username: false, password: false }
+  };
+
+  images = [img1, img2, img3, img4];
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState(prevState => ({
+        currentIndex: (prevState.currentIndex + 1) % this.images.length
+      }));
+    }, 4000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  /* ================= VALIDATION HELPERS ================= */
+  validateUsername = (value) => {
+    if (!value) return 'Employee ID is required';
+    if (!/^VPPL\d{3,4}$/.test(value)) return 'Format must be VPPL001 or VPPL0001';
+    return '';
+  };
+
+  validatePassword = (value) => {
+    if (!value) return 'Password is required';
+    // if (value.length < 6) return 'Password must be at least 6 characters';
+    return '';
   };
 
   /* ================= INPUT HANDLER ================= */
   handleChange = (e) => {
     const { name, value } = e.target;
 
-    /* -------- EMPLOYEE ID -------- */
     if (name === 'username') {
       const upperValue = value.toUpperCase();
-
-      // max length safeguard (VPPL0001 = 8)
       if (upperValue.length > 8) return;
 
-      let usernameError = '';
+      const usernameError = this.state.touched.username
+        ? this.validateUsername(upperValue)
+        : (upperValue.length >= 7 ? this.validateUsername(upperValue) : '');
 
-      if (upperValue.length >= 7 && !/^VPPL\d{3,4}$/.test(upperValue)) {
-        usernameError = 'Format must be VPPL001 or VPPL0001';
-      }
-
-      this.setState({
-        username: upperValue,
-        usernameError
-      });
+      this.setState({ username: upperValue, usernameError });
       return;
     }
 
-    /* -------- PASSWORD (NO VALIDATION) -------- */
     if (name === 'password') {
-      this.setState({ password: value });
+      const passwordError = this.state.touched.password
+        ? this.validatePassword(value)
+        : '';
+      this.setState({ password: value, passwordError });
     }
+  };
+
+  handleBlur = (e) => {
+    const { name } = e.target;
+    const { username, password } = this.state;
+
+    this.setState(prev => ({
+      touched: { ...prev.touched, [name]: true },
+      usernameError: name === 'username' ? this.validateUsername(username) : prev.usernameError,
+      passwordError: name === 'password' ? this.validatePassword(password) : prev.passwordError,
+    }));
   };
 
   togglePassword = () => {
@@ -59,41 +93,35 @@ export default class Login extends Component {
     e.preventDefault();
     this.setState({ error: '' });
 
-    const { username, password, usernameError } = this.state;
+    const { username, password } = this.state;
 
-    if (!username) {
-      this.setState({ error: 'Employee ID is required' });
-      return;
-    }
+    const usernameError = this.validateUsername(username);
+    const passwordError = this.validatePassword(password);
 
-    if (!password) {
-      this.setState({ error: 'Password is required' });
-      return;
-    }
-
-    if (usernameError) return;
-
-    if (!/^VPPL\d{3,4}$/.test(username)) {
+    if (usernameError || passwordError) {
       this.setState({
-        error: 'Employee ID format must be VPPL001 or VPPL0001'
+        usernameError,
+        passwordError,
+        touched: { username: true, password: true }
       });
       return;
     }
 
-  fetch(`/api/user/login`, {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username, password })
-})
+    fetch(`/api/user/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
       .then(res => {
         if (!res.ok) throw new Error('Invalid username or password');
         return res.json();
       })
       .then(async result => {
         await fetch("/api/hr/holidaylocation", {
-    credentials: "include"
-  }).catch(() => {});
+          credentials: "include"
+        }).catch(() => {});
+
         const msg = result.message || '';
 
         if (msg.includes('status : 0')) {
@@ -127,72 +155,93 @@ export default class Login extends Component {
       return <Navigate to={this.state.redirectTo} replace />;
     }
 
+    const { username, password, showPassword, usernameError, passwordError, error } = this.state;
+
     return (
       <div className="login-page">
         <Header />
 
         <div
           className="login-main"
-          style={{ backgroundImage: `url(${loginBg})` }}
+          style={{
+            backgroundImage: `url(${this.images[this.state.currentIndex]})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            transition: 'background-image 1s ease-in-out'
+          }}
         >
           <div className="login-left" />
 
           <div className="login-right">
-            <form className="login-box" onSubmit={this.handleLogin}>
+            <form className="login-box" onSubmit={this.handleLogin} noValidate>
+
               <h2>Login</h2>
               <p className="login-subtitle">
                 Enter your credentials to access your account
               </p>
 
-              <label className="login-label">
-                Employee ID <span className="required-star">*</span>
-              </label>
-              <input
-                name="username"
-                value={this.state.username}
-                onChange={this.handleChange}
-                className="login-input"
-                placeholder="VPPL001 or VPPL0001"
-                required
-              />
-              {this.state.usernameError && (
-                <small className="error-message">
-                  {this.state.usernameError}
-                </small>
-              )}
-
-              <label className="login-label">
-                Password <span className="required-star">*</span>
-              </label>
-              <div className="password-wrapper">
+              {/* ── EMPLOYEE ID ── */}
+              <div className="login-field-group">
+                <label className="login-label">
+                  Employee ID <span className="required-star">*</span>
+                </label>
                 <input
-                  type={this.state.showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={this.state.password}
+                  name="username"
+                  value={username}
                   onChange={this.handleChange}
-                  className="login-input password-input"
-                  placeholder="Enter Password"
-                  required
+                  onBlur={this.handleBlur}
+                  className={`login-input${usernameError ? ' input-error' : ''}`}
+                  placeholder="VPPL001 or VPPL0001"
+                  autoComplete="username"
                 />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={this.togglePassword}
-                  tabIndex={-1}
-                >
-                  {this.state.showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
+                {usernameError && (
+                  <small className="field-error-msg">⚠ {usernameError}</small>
+                )}
               </div>
 
-              <button className="login-button">Login</button>
+              {/* ── PASSWORD ── */}
+              <div className="login-field-group">
+                <label className="login-label">
+                  Password <span className="required-star">*</span>
+                </label>
+                <div className="password-wrapper">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={password}
+                    onChange={this.handleChange}
+                    onBlur={this.handleBlur}
+                    className={`login-input password-input${passwordError ? ' input-error' : ''}`}
+                    placeholder="Enter Password"
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={this.togglePassword}
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {passwordError && (
+                  <small className="field-error-msg">⚠ {passwordError}</small>
+                )}
+              </div>
+
+              {/* ── SUBMIT ── */}
+              <button className="login-button" type="submit">Login</button>
 
               <Link to="/forgot-password" className="forgot-link">
                 Forgot Password?
               </Link>
 
-              {this.state.error && (
-                <div className="error-message">{this.state.error}</div>
+              {/* ── API / AUTH ERROR ── */}
+              {error && (
+                <div className="login-api-error">⚠ {error}</div>
               )}
+
             </form>
           </div>
         </div>
@@ -204,4 +253,3 @@ export default class Login extends Component {
     );
   }
 }
-

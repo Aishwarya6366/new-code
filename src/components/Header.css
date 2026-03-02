@@ -1,21 +1,38 @@
-.app-header {
-  width: 100%;
-  background: #0b2a4a;
-  padding: 12px 32px;
-}
-
-.header-content {
+.site-header {
+  background: #0f2f52;
+  padding: 12px 28px;
   display: flex;
   align-items: center;
-  gap: 10px;
+}
+
+.header-brand {
+  display: flex;          /* ← logo + name on same line */
+  align-items: center;
+  gap: 12px;
 }
 
 .header-logo {
-  height: 60px;
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
-.header-title {
-  color: #f5c542;
-  font-size: 22px;
-  font-weight: 600;
+.header-company-name {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* Shrink text on small screens */
+@media (max-width: 480px) {
+  .header-company-name {
+    font-size: 14px;
+  }
+
+  .header-logo {
+    height: 34px;
+  }
 }

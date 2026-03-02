@@ -1,16 +1,19 @@
 import React from 'react';
-import './Header.css';
-import logo from '../assets/venturebiz_logo.png';
+import './Header.css'; // or inline styles below
 
-const Header = ({ title = 'Venturebiz Promotions Pvt. Ltd.' }) => {
+export default function Header() {
   return (
-    <header className="app-header">
-      <div className="header-content">
-        <img src={logo} alt="Venturebiz Logo" className="header-logo" />
-        <h1 className="header-title">{title}</h1>
+    <header className="site-header">
+      <div className="header-brand">
+        <img
+          // src="/logo.png"           // ← replace with your actual logo import/path
+          // alt="Company Logo"
+          className="header-logo"
+        />
+        <span className="header-company-name">
+          Venturebiz Promotions Private Limited
+        </span>
       </div>
     </header>
   );
-};
-
-export default Header;
+}
