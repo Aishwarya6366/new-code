@@ -211,8 +211,7 @@ export default class EmpDashboard extends Component {
             <h2>Welcome Back! 👋</h2>
             <p>Employee Dashboard</p>
           </div>
-          <WelcomeIllo/>
-          <div className="welcome-deco"></div>
+          
         </div>
 
         {/* ── Quick Actions ── */}

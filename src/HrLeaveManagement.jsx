@@ -422,38 +422,17 @@ export default function HrLeaveManagement() {
         <span className="hero-sparkle hs5">✦</span>
 
         <div className="hero-text">
-          <div className="hero-badge">📋 HR Module</div>
+          
           <h1 className="hero-title">Leave Management</h1>
           <p className="hero-sub">
             Manage leave types and Loss of Pay records efficiently
           </p>
         </div>
 
-        {/* Floating leave imagery */}
-        <div className="hero-imagery">
-          <div className="hero-line hl1" />
-          <div className="hero-line hl2" />
-          <div className="hero-line hl3" />
-          <div className="mf mf-main">📅</div>
-          <div className="mf mf-1">🏖️</div>
-          <div className="mf mf-2">🤒</div>
-          <div className="mf mf-3">✅</div>
-          <div className="mf mf-4">📊</div>
-          <div className="mf mf-5">🍼</div>
-        </div>
+       
       </div>
 
-      {/* ══════════ TICKER STRIP ══════════ */}
-      <div className="ticker-strip">
-        <div className="ticker-track">
-          {allTicker.map((item, idx) => (
-            <div className="ticker-item" key={idx}>
-              <div className="ticker-bubble">{item.icon}</div>
-              {item.label}
-            </div>
-          ))}
-        </div>
-      </div>
+    
 
       {/* ══════════ CONTENT ══════════ */}
       <div className="leave-content">

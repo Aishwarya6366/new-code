@@ -520,39 +520,6 @@ const viewEmployee = async (emp) => {
             </div>
           </div>
 
-          <div className="hb-right">
-            <div className="hb-illustration">
-              <svg viewBox="0 0 300 180" fill="none" className="hb-svg">
-                <rect x="85" y="50" width="130" height="90" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" strokeWidth="2"/>
-                <rect x="92" y="57" width="116" height="76" rx="7" fill="rgba(255,255,255,0.15)"/>
-                <rect x="105" y="95" width="14" height="28" rx="3" fill="rgba(255,255,255,0.8)" className="hb-bar1"/>
-                <rect x="125" y="82" width="14" height="41" rx="3" fill="rgba(255,255,255,0.9)" className="hb-bar2"/>
-                <rect x="145" y="90" width="14" height="33" rx="3" fill="rgba(255,255,255,0.7)" className="hb-bar3"/>
-                <rect x="165" y="75" width="14" height="48" rx="3" fill="rgba(255,255,255,0.85)" className="hb-bar4"/>
-                <rect x="185" y="88" width="14" height="35" rx="3" fill="rgba(255,255,255,0.75)" className="hb-bar5"/>
-                <rect x="140" y="140" width="20" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-                <rect x="128" y="148" width="44" height="5" rx="2.5" fill="rgba(255,255,255,0.25)"/>
-                <circle cx="50" cy="75" r="16" fill="rgba(255,255,255,0.9)" className="hb-p1"/>
-                <circle cx="46" cy="73" r="2.5" fill="#f97316"/>
-                <circle cx="54" cy="73" r="2.5" fill="#f97316"/>
-                <path d="M46 80 Q50 85 54 80" stroke="#f97316" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                <path d="M22 155 Q32 128 50 120 Q68 128 78 155" stroke="rgba(255,255,255,0.8)" strokeWidth="4" fill="none" strokeLinecap="round" className="hb-pb1"/>
-                <circle cx="250" cy="75" r="16" fill="rgba(255,255,255,0.85)" className="hb-p2"/>
-                <circle cx="246" cy="73" r="2.5" fill="#ec4899"/>
-                <circle cx="254" cy="73" r="2.5" fill="#ec4899"/>
-                <path d="M246 80 Q250 85 254 80" stroke="#ec4899" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                <path d="M222 155 Q232 128 250 120 Q268 128 278 155" stroke="rgba(255,255,255,0.7)" strokeWidth="4" fill="none" strokeLinecap="round" className="hb-pb2"/>
-                <rect x="14" y="42" width="46" height="20" rx="10" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" className="hb-bub1"/>
-                <text x="37" y="56" textAnchor="middle" fill="white" fontSize="9" fontWeight="800">HR ✓</text>
-                <rect x="235" y="35" width="55" height="20" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" className="hb-bub2"/>
-                <text x="262" y="49" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="800">HRMS 🚀</text>
-                <rect x="8" y="95" width="32" height="16" rx="8" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" strokeWidth="1" className="hb-fp1"/>
-                <text x="24" y="107" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">+12%</text>
-                <rect x="256" y="98" width="36" height="16" rx="8" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" strokeWidth="1" className="hb-fp2"/>
-                <text x="274" y="110" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="700">98%</text>
-              </svg>
-            </div>
-          </div>
         </div>
 
         {/* ── MODULE CARDS ── */}
@@ -600,7 +567,7 @@ const viewEmployee = async (emp) => {
             {/* Employee ID — max 8 chars for VPPL0001 */}
             <SmartField
               label="Employee ID"
-              icon="🪪"
+             
               value={sp.username}
               placeholder="e.g. VPPL001 or VPPL0001"
               maxLen={8}
@@ -612,7 +579,7 @@ const viewEmployee = async (emp) => {
             />
             <SmartField
               label="First Name"
-              icon="👤"
+              
               value={sp.firstName}
               placeholder="e.g. John"
               hint="Letters only"
@@ -623,7 +590,7 @@ const viewEmployee = async (emp) => {
             />
             <SmartField
               label="Department"
-              icon="🏢"
+             
               value={sp.departmentName}
               placeholder="e.g. Finance"
               hint="Letters and spaces only"
@@ -634,7 +601,7 @@ const viewEmployee = async (emp) => {
             />
             <SmartField
               label="Designation"
-              icon="💼"
+              
               value={sp.designationName}
               placeholder="e.g. Analyst"
               hint="Letters and spaces only"
@@ -645,7 +612,7 @@ const viewEmployee = async (emp) => {
             />
             <SmartField
               label="Date of Joining — From"
-              icon="📅"
+              
               type="date"
               value={sp.startDate}
               max={new Date().toISOString().split("T")[0]}
@@ -655,7 +622,7 @@ const viewEmployee = async (emp) => {
             />
             <SmartField
               label="Date of Joining — To"
-              icon="📅"
+              
               type="date"
               value={sp.endDate}
               min={sp.startDate || undefined}
